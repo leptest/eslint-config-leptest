@@ -1,0 +1,27 @@
+module.exports = {
+	parser: 'babel-eslint',
+	extends: ['airbnb'],
+	env: {
+		browser: true,
+	},
+	settings: {
+		react: {
+			version: '16.13.1',
+		},
+	},
+	globals: {
+	},
+	rules: {
+		'no-tabs': 0,
+		'react/jsx-indent': [2, 'tab'],
+		'react/jsx-indent-props': [2, 'tab'],
+		indent: ['error', 'tab'],
+
+		'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.js'] }],
+		'react/prop-types': 0,
+		'jsx-a11y/label-has-associated-control': 0,
+		'react/jsx-one-expression-per-line': 0,
+		'no-console': 0,
+		'max-len': 0,
+	},
+};
