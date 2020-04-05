@@ -17,11 +17,19 @@ module.exports = {
 		'react/jsx-indent-props': [2, 'tab'],
 		indent: ['error', 'tab'],
 
-		'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.js'] }],
+		'react/jsx-filename-extension': [1, {
+			extensions: ['.jsx', '.js']
+		}],
 		'react/prop-types': 0,
 		'jsx-a11y/label-has-associated-control': 0,
 		'react/jsx-one-expression-per-line': 0,
 		'no-console': 0,
 		'max-len': 0,
+		'import/no-extraneous-dependencies': ['error', {
+            'packageDir': [
+				'./',
+				'./node_modules/@leptest/gatsby-netlify-cms'
+			]
+        }]
 	},
 };
