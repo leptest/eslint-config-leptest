@@ -1,0 +1,3 @@
+{
+  "extends": ["@leptest/eslint-config-leptest"]
+}
