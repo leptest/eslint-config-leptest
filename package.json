@@ -1,6 +1,6 @@
 {
   "name": "@leptest/eslint-config-leptest",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Eslint shareable config",
   "main": "index.js",
   "scripts": {
