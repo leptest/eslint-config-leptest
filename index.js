@@ -24,12 +24,6 @@ module.exports = {
 		'jsx-a11y/label-has-associated-control': 0,
 		'react/jsx-one-expression-per-line': 0,
 		'no-console': 0,
-		'max-len': 0,
-		'import/no-extraneous-dependencies': ['error', {
-            'packageDir': [
-				'./',
-				'./node_modules/@leptest/gatsby-netlify-cms'
-			]
-        }]
+		'max-len': 0
 	},
 };
