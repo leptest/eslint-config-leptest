@@ -24,6 +24,7 @@ module.exports = {
 		'jsx-a11y/label-has-associated-control': 0,
 		'react/jsx-one-expression-per-line': 0,
 		'no-console': 0,
-		'max-len': 0
+		'max-len': 0,
+		'linebreak-style': [2, "windows"]
 	},
 };
