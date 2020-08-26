@@ -18,13 +18,13 @@ module.exports = {
 		indent: ['error', 'tab'],
 
 		'react/jsx-filename-extension': [1, {
-			extensions: ['.jsx', '.js']
+			extensions: ['.jsx', '.js'],
 		}],
 		'react/prop-types': 0,
 		'jsx-a11y/label-has-associated-control': 0,
 		'react/jsx-one-expression-per-line': 0,
 		'no-console': 0,
 		'max-len': 0,
-		'linebreak-style': [2, "windows"]
+		'linebreak-style': [2, 'windows'],
 	},
 };
