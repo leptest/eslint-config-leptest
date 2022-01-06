@@ -1,12 +1,12 @@
 module.exports = {
-	parser: 'babel-eslint',
+	parser: '@babel/eslint-parser',
 	extends: ['airbnb'],
 	env: {
 		browser: true,
 	},
 	settings: {
 		react: {
-			version: '16.14.0',
+			version: '17.0.2',
 		},
 	},
 	globals: {
