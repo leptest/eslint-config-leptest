@@ -29,5 +29,12 @@ module.exports = {
 		'no-console': 0,
 		'max-len': 0,
 		'linebreak-style': [2, 'windows'],
+		'react/function-component-definition': [
+			2,
+			{
+				namedComponents: 'arrow-function',
+				unnamedComponents: 'arrow-function',
+			},
+		],
 	},
 };
