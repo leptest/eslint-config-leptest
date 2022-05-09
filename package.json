@@ -28,7 +28,7 @@
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "7.16.7",
     "babel-preset-expo": "9.0.2",
-    "eslint": "8.14.0",
+    "eslint": "8.15.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-standard": "17.0.0",
     "eslint-config-standard-react": "11.0.1",
