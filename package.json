@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/leptest/eslint-config-leptest#readme",
   "dependencies": {
-    "@babel/core": "7.17.9",
+    "@babel/core": "7.18.5",
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "7.16.7",
     "babel-preset-expo": "9.0.2",
