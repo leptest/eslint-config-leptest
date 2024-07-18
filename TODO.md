@@ -13,3 +13,13 @@
 - add and use @stylistic/eslint-plugin-js mentioned here https://eslint.org/docs/latest/rules/comma-dangle
 
 - testing github actions and sonar/dependabot/etc
+
+---
+
+"airbnb-typescript",
+
+"parserOptions": {
+"project": "./tsconfig.json"
+},
+
+---
