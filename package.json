@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint --ext .jsx,.js .",
-    "eslint-fix": "eslint --ext .jsx,.js --fix ."
+    "eslint": "eslint --ext .jsx,.js,.tsx,.ts .",
+    "eslint-fix": "eslint --ext .jsx,.js,.tsx,.ts --fix ."
   },
   "repository": {
     "type": "git",
@@ -27,17 +27,29 @@
     "@babel/core": "7.24.9",
     "@babel/eslint-parser": "7.24.8",
     "@babel/preset-react": "7.24.7",
+    "@typescript-eslint/eslint-plugin": "7.16.1",
+    "@typescript-eslint/parser": "7.16.1",
     "eslint": "8.57.0",
     "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "18.0.0",
     "eslint-config-standard": "17.1.0",
     "eslint-config-standard-react": "13.0.0",
-    "eslint-plugin-compat": "5.0.0",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jsx-a11y": "6.9.0",
+    "eslint-plugin-compat": "6.0.0",
     "eslint-plugin-n": "16.6.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.4.0",
     "eslint-plugin-react": "7.34.4",
     "eslint-plugin-react-hooks": "4.6.2"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "cover 91%",
+    "not op_mini all",
+    "not kaios 2.5",
+    "not and_qq 13.1",
+    "not dead",
+    "edge > 1"
+  ]
 }
