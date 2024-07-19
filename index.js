@@ -1,9 +1,16 @@
 module.exports = {
-	parser: '@babel/eslint-parser',
-	extends: ['airbnb'],
-	parserOptions: {
-		requireConfigFile: false,
-	},
+	parser: '@typescript-eslint/parser',
+	plugins: ['@typescript-eslint', 'compat'],
+	extends: [
+		'airbnb',
+		'airbnb/hooks',
+		'eslint:recommended',
+		'plugin:@typescript-eslint/strict',
+		'plugin:@typescript-eslint/stylistic',
+		'standard',
+		'plugin:compat/recommended',
+	],
+	root: true,
 	env: {
 		browser: true,
 	},
@@ -12,9 +19,10 @@ module.exports = {
 			version: '17.0.2',
 		},
 	},
-	globals: {
-	},
+	globals: {},
 	rules: {
+		semi: [2, 'always'],
+		'no-extra-semi': 2,
 		'no-tabs': 0,
 		'react/jsx-indent': [2, 'tab'],
 		'react/jsx-indent-props': [2, 'tab'],
@@ -34,5 +42,9 @@ module.exports = {
 				unnamedComponents: 'arrow-function',
 			},
 		],
+
+		'react/jsx-no-useless-fragment': 0,
+		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+		'comma-dangle': [1, 'only-multiline'],
 	},
 };

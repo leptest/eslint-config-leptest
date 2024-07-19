@@ -45,6 +45,6 @@
 
     "react/jsx-no-useless-fragment": 0,
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "comma-dangle": "off"
+    "comma-dangle": [1, "only-multiline"]
   }
 }
