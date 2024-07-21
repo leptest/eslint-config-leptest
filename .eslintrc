@@ -26,8 +26,18 @@
     "no-tabs": 0,
     "react/jsx-indent": [2, "tab"],
     "react/jsx-indent-props": [2, "tab"],
-    "indent": ["error", "tab"],
-
+    "indent": [2, "tab",
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "brace-style": [
+      2,
+      "stroustrup",
+      {
+        "allowSingleLine": false
+      }
+    ],
     "react/jsx-filename-extension": [1, { "allow": "as-needed" }],
     "react/prop-types": 0,
     "jsx-a11y/label-has-associated-control": 0,
@@ -42,9 +52,10 @@
         "unnamedComponents": "arrow-function"
       }
     ],
-
     "react/jsx-no-useless-fragment": 0,
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "comma-dangle": [1, "only-multiline"]
+    "comma-dangle": [2, "only-multiline"],
+    "space-before-function-paren": [2, "never"],
+    "multiline-ternary": [2, "never"]
   }
 }

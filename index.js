@@ -8,16 +8,16 @@ module.exports = {
 		'plugin:@typescript-eslint/strict',
 		'plugin:@typescript-eslint/stylistic',
 		'standard',
-		'plugin:compat/recommended',
+		'plugin:compat/recommended'
 	],
 	root: true,
 	env: {
-		browser: true,
+		browser: true
 	},
 	settings: {
 		react: {
-			version: '18',
-		},
+			version: '18'
+		}
 	},
 	globals: {},
 	rules: {
@@ -26,8 +26,18 @@ module.exports = {
 		'no-tabs': 0,
 		'react/jsx-indent': [2, 'tab'],
 		'react/jsx-indent-props': [2, 'tab'],
-		indent: ['error', 'tab'],
-
+		indent: [2, 'tab',
+			{
+				SwitchCase: 1
+			}
+		],
+		'brace-style': [
+			2,
+			'stroustrup',
+			{
+				allowSingleLine: false
+			}
+		],
 		'react/jsx-filename-extension': [1, { allow: 'as-needed' }],
 		'react/prop-types': 0,
 		'jsx-a11y/label-has-associated-control': 0,
@@ -39,12 +49,13 @@ module.exports = {
 			2,
 			{
 				namedComponents: 'arrow-function',
-				unnamedComponents: 'arrow-function',
-			},
+				unnamedComponents: 'arrow-function'
+			}
 		],
-
 		'react/jsx-no-useless-fragment': 0,
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-		'comma-dangle': [1, 'only-multiline'],
-	},
+		'comma-dangle': [2, 'only-multiline'],
+		'space-before-function-paren': [2, 'never'],
+		'multiline-ternary': [2, 'never']
+	}
 };
