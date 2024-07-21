@@ -40,10 +40,17 @@ module.exports = {
 		],
 		'react/jsx-filename-extension': [1, { allow: 'as-needed' }],
 		'react/prop-types': 0,
-		'jsx-a11y/label-has-associated-control': 0,
+		'jsx-a11y/label-has-associated-control': 2,
 		'react/jsx-one-expression-per-line': 0,
-		'no-console': 0,
-		'max-len': 0,
+		'no-console': 2,
+		'max-len': [2, {
+			code: 120,
+			ignoreTrailingComments: true,
+			ignoreComments: true,
+			ignoreUrls: true,
+			ignoreStrings: true,
+			tabWidth: 1
+		}],
 		'linebreak-style': [2, 'windows'],
 		'react/function-component-definition': [
 			2,
@@ -52,7 +59,7 @@ module.exports = {
 				unnamedComponents: 'arrow-function'
 			}
 		],
-		'react/jsx-no-useless-fragment': 0,
+		'react/jsx-no-useless-fragment': 2,
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'comma-dangle': [2, 'only-multiline'],
 		'space-before-function-paren': [2, 'never'],
