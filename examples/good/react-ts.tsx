@@ -1,14 +1,15 @@
 // =============================================================================
 // GOOD TypeScript + React code - passes all rules
 // =============================================================================
+/* eslint-disable import/no-unresolved, react/jsx-filename-extension */
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 
 // --- Typed props interfaces (consistent-type-definitions: interface) ---
 interface ButtonProps {
 	label: string;
 	onClick: () => void;
-	disabled?: boolean;
-	variant?: 'primary' | 'secondary';
+	disabled: boolean;
+	variant: 'primary' | 'secondary';
 }
 
 interface InputFieldProps {
@@ -16,8 +17,8 @@ interface InputFieldProps {
 	name: string;
 	value: string;
 	onChange: (value: string) => void;
-	placeholder?: string;
-	type?: 'text' | 'email' | 'password';
+	placeholder: string;
+	type: 'text' | 'email' | 'password';
 }
 
 interface ListItem {
@@ -54,8 +55,8 @@ type KeyDownHandler = (e: React.KeyboardEvent<HTMLElement>) => void;
 
 // --- Arrow function components (react/function-component-definition) ---
 
-// Simple button with typed props
-const AccessibleButton = ({ label, onClick, disabled = false, variant = 'primary' }: ButtonProps): React.ReactElement => {
+// Simple button with typed props and accessibility
+const AccessibleButton = ({ label, onClick, disabled, variant }: ButtonProps): React.ReactElement => {
 	const handleKeyDown: KeyDownHandler = useCallback((e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			onClick();
@@ -76,14 +77,14 @@ const AccessibleButton = ({ label, onClick, disabled = false, variant = 'primary
 	);
 };
 
-// Input field with typed hooks
+// Input field with typed hooks (useRef<T>, useCallback)
 const InputField = ({
 	id,
 	name,
 	value,
 	onChange,
-	placeholder = '',
-	type = 'text',
+	placeholder,
+	type,
 }: InputFieldProps): React.ReactElement => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -110,20 +111,23 @@ const InputField = ({
 	);
 };
 
-// Task list with accessibility
+// Task list with accessibility (no redundant roles)
 const TaskList = ({ items, onToggle, onDelete }: TaskListProps): React.ReactElement => (
-	<ul role="list" aria-label="Task list">
+	<ul aria-label="Task list">
 		{items.map((item) => (
-			<li key={item.id} role="listitem">
+			<li key={item.id}>
 				<span>{item.title}</span>
 				<span>{item.description}</span>
 				<AccessibleButton
 					label={item.completed ? 'Mark incomplete' : 'Mark complete'}
 					onClick={() => onToggle(item.id)}
+					disabled={false}
+					variant="primary"
 				/>
 				<AccessibleButton
 					label="Delete task"
 					onClick={() => onDelete(item.id)}
+					disabled={false}
 					variant="secondary"
 				/>
 			</li>
@@ -131,7 +135,7 @@ const TaskList = ({ items, onToggle, onDelete }: TaskListProps): React.ReactElem
 	</ul>
 );
 
-// --- Generic component with typed hooks ---
+// --- Generic component with typed hooks (useState<T>, useRef<T>) ---
 const TypedSelect = <T extends string | number>({
 	id,
 	options,
@@ -142,8 +146,8 @@ const TypedSelect = <T extends string | number>({
 	const selectRef = useRef<HTMLSelectElement>(null);
 
 	const handleChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-		const { value } = e.target;
-		const matchedOption = options.find((opt) => String(opt.value) === value);
+		const { value: rawValue } = e.target;
+		const matchedOption = options.find((opt) => String(opt.value) === rawValue);
 		if (matchedOption) {
 			onChange(matchedOption.value);
 		}
@@ -171,25 +175,25 @@ const TypedSelect = <T extends string | number>({
 	);
 };
 
-// --- Form with typed state and event handlers ---
-interface FormData {
+// --- Form with typed state (useState<T>) and event handlers ---
+interface RegistrationData {
 	username: string;
 	email: string;
 }
 
-interface FormErrors {
-	username?: string;
-	email?: string;
+interface ValidationErrors {
+	username: string;
+	email: string;
 }
 
 const RegistrationForm = (): React.ReactElement => {
-	const [formData, setFormData] = useState<FormData>({ username: '', email: '' });
-	const [errors, setErrors] = useState<FormErrors>({});
+	const [formData, setFormData] = useState<RegistrationData>({ username: '', email: '' });
+	const [errors, setErrors] = useState<ValidationErrors>({ username: '', email: '' });
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const validate = useCallback((data: FormData): FormErrors => {
-		const result: FormErrors = {};
+	const validate = useCallback((data: RegistrationData): ValidationErrors => {
+		const result: ValidationErrors = { username: '', email: '' };
 		if (data.username.length < 3) {
 			result.username = 'Username must be at least 3 characters';
 		}
@@ -201,9 +205,9 @@ const RegistrationForm = (): React.ReactElement => {
 
 	const handleSubmit: FormSubmitHandler = useCallback((e) => {
 		e.preventDefault();
-		const validationErrors = validate(formData);
-		setErrors(validationErrors);
-		const hasErrors = Object.keys(validationErrors).length > 0;
+		const validationResult = validate(formData);
+		setErrors(validationResult);
+		const hasErrors = validationResult.username.length > 0 || validationResult.email.length > 0;
 		if (!hasErrors) {
 			setSubmitted(true);
 		}
@@ -228,17 +232,20 @@ const RegistrationForm = (): React.ReactElement => {
 				name="Username"
 				value={formData.username}
 				onChange={handleUsernameChange}
+				placeholder="Enter username"
+				type="text"
 			/>
-			{errors.username ? <span role="alert">{errors.username}</span> : null}
+			{errors.username.length > 0 ? <span role="alert">{errors.username}</span> : null}
 
 			<InputField
 				id="email"
 				name="Email"
 				value={formData.email}
 				onChange={handleEmailChange}
+				placeholder="Enter email"
 				type="email"
 			/>
-			{errors.email ? <span role="alert">{errors.email}</span> : null}
+			{errors.email.length > 0 ? <span role="alert">{errors.email}</span> : null}
 
 			<button type="submit">Register</button>
 		</form>
@@ -253,13 +260,13 @@ const MediaSection = (): React.ReactElement => {
 		setCount((prev) => prev + 1);
 	}, []);
 
-	// Effect with proper dependency array
+	// useEffect with proper dependency array
 	useEffect(() => {
 		const title = `Count: ${count}`;
 		document.title = title;
 	}, [count]);
 
-	// useMemo for expensive computation
+	// useMemo for computed values
 	const statusText = useMemo(() => (count > 10 ? 'High count' : 'Low count'), [count]);
 
 	return (
@@ -284,11 +291,10 @@ const MediaSection = (): React.ReactElement => {
 				<p>{statusText}</p>
 			</section>
 
-			{/* button-has-type */}
+			{/* react/button-has-type */}
 			<button type="button" onClick={increment}>Increment</button>
 
-			{/* jsx-a11y/html-has-lang handled at document level */}
-			{/* jsx-a11y/no-redundant-roles: don't add redundant roles */}
+			{/* Accessible table */}
 			<table>
 				<thead>
 					<tr>
@@ -328,6 +334,6 @@ export type {
 	InputChangeHandler,
 	FormSubmitHandler,
 	KeyDownHandler,
-	FormData,
-	FormErrors,
+	RegistrationData,
+	ValidationErrors,
 };

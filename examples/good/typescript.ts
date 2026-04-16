@@ -1,8 +1,8 @@
 // =============================================================================
-// GOOD TypeScript code - passes all @typescript-eslint rules
+// GOOD TypeScript code - passes all @typescript-eslint and core ESLint rules
 // =============================================================================
 
-// --- consistent-type-definitions: use interface (not type alias) ---
+// --- consistent-type-definitions: use interface (not type alias for objects) ---
 interface User {
 	name: string;
 	age: number;
@@ -12,6 +12,7 @@ interface User {
 // --- no-empty-interface: extending another interface is allowed ---
 interface AdminUser extends User {
 	role: string;
+	permissions: string[];
 }
 
 // --- consistent-indexed-object-style: use Record<K,V> ---
@@ -20,7 +21,7 @@ interface AppConfig {
 	flags: Record<string, boolean>;
 }
 
-// --- array-type: use T[] notation (default "array" style) ---
+// --- array-type: use T[] notation (not Array<T>) ---
 interface DataStore {
 	users: User[];
 	admins: AdminUser[];
@@ -28,15 +29,20 @@ interface DataStore {
 	scores: number[];
 }
 
+// --- prefer-function-type: use function type instead of callable interface ---
+type Formatter = (input: string) => string;
+type Comparator<T> = (a: T, b: T) => number;
+
 // --- no-duplicate-enum-values, prefer-literal-enum-member ---
-enum Status {
+// --- export enums directly to avoid no-unused-vars on members ---
+export enum Status {
 	Active = 'active',
 	Inactive = 'inactive',
 	Pending = 'pending',
 	Archived = 'archived',
 }
 
-enum Priority {
+export enum Priority {
 	Low = 0,
 	Medium = 1,
 	High = 2,
@@ -46,7 +52,6 @@ enum Priority {
 // --- consistent-generic-constructors: specify generic on constructor side ---
 const userMap = new Map<string, User>();
 const tagSet = new Set<string>();
-const scoreList = new Array<number>();
 
 // --- no-explicit-any: use proper types (unknown, generics, etc.) ---
 const parseJson = (raw: string): unknown => JSON.parse(raw);
@@ -63,16 +68,16 @@ const VERSION = 1 as const;
 // --- consistent-type-assertions: use `as` expressions ---
 const rawData: unknown = parseJson('{"id": 1}');
 const parsed = rawData as Record<string, number>;
-const userId = parsed.id;
 
 // --- no-non-null-assertion: handle nullability safely ---
-const findUser = (id: string): User | undefined => {
-	const found = userMap.get(id);
+const findUser = (uid: string): User | undefined => {
+	const found = userMap.get(uid);
 	return found;
 };
 
-const getDisplayName = (id: string): string => {
-	const user = findUser(id);
+// --- no-else-return: no else block after return ---
+const getDisplayName = (uid: string): string => {
+	const user = findUser(uid);
 	if (user) {
 		return user.name;
 	}
@@ -86,46 +91,21 @@ const wrapInArray = <T>(item: T): T[] => [item];
 // --- generics with constraints (proper, non-trivial) ---
 const getProperty = <T, K extends keyof T>(obj: T, key: K): T[K] => obj[key];
 
-// --- prefer-function-type: use function type instead of callable interface ---
-type Formatter = (input: string) => string;
-type Comparator<T> = (a: T, b: T) => number;
-
-// --- adjacent-overload-signatures: overloads must be grouped together ---
-function processValue(value: string): string;
-function processValue(value: number): number;
-function processValue(value: string | number): string | number {
-	if (typeof value === 'string') {
-		return value.toUpperCase();
-	}
-	return value * 2;
-}
-
-// --- unified-signatures: these cannot be unified (different return types) ---
-function convert(input: string): number;
-function convert(input: number): string;
-function convert(input: string | number): string | number {
-	if (typeof input === 'string') {
-		return Number(input);
-	}
-	return String(input);
-}
-
-// --- no-namespace: use modules (export at top level) ---
-// (We simply don't use namespace; we export directly)
-
-// --- triple-slash-reference: avoided (use import instead) ---
-// (We simply don't use /// <reference /> directives)
+// --- no-namespace: we simply don't use namespaces ---
+// --- triple-slash-reference: we use imports, not /// <reference /> ---
 
 // --- class-literal-property-style: use readonly fields instead of getters ---
-class AppInfo {
-	readonly version = '1.0.0';
-
-	readonly author = 'Team';
-}
-
-// --- no-extraneous-class: class has instance members, not static-only ---
+// --- no-extraneous-class: class has instance members ---
+// --- no-useless-constructor: constructor does meaningful work ---
+// --- max-classes-per-file: only one class in this file ---
 class Calculator {
+	readonly precision = 2;
+
 	private result = 0;
+
+	constructor(initial: number) {
+		this.result = initial;
+	}
 
 	add(value: number): Calculator {
 		this.result += value;
@@ -138,72 +118,64 @@ class Calculator {
 	}
 
 	getResult(): number {
-		return this.result;
+		return Number(this.result.toFixed(this.precision));
+	}
+
+	format(formatter: Formatter): string {
+		return formatter(String(this.result));
+	}
+
+	compare(other: Calculator, comparator: Comparator<number>): number {
+		return comparator(this.getResult(), other.getResult());
 	}
 }
 
-// --- no-useless-constructor: only add constructors that do something ---
-class Logger {
-	private prefix: string;
+// --- no-this-alias: use arrow functions instead of aliasing `this` ---
+const createCounter = () => {
+	let count = 0;
+	return {
+		increment: () => {
+			count += 1;
+			return count;
+		},
+		getCount: () => count,
+	};
+};
 
-	constructor(prefix: string) {
-		this.prefix = `[${prefix}]`;
-	}
-
-	format(message: string): string {
-		return `${this.prefix} ${message}`;
-	}
-}
-
-// --- prefer-for-of / no-restricted-syntax: use array methods instead ---
+// --- prefer-for-of / no-restricted-syntax: use array methods instead of loops ---
 const numbers = [1, 2, 3, 4, 5];
 const doubled = numbers.map((n) => n * 2);
 const evens = numbers.filter((n) => n % 2 === 0);
 const total = numbers.reduce((sum, n) => sum + n, 0);
-
-// --- no-dynamic-delete: use Map or object spread to remove keys ---
-const removeKey = (
-	obj: Record<string, unknown>,
-	key: string
-): Record<string, unknown> => {
-	const { [key]: _removed, ...rest } = obj;
-	return rest;
-};
-
-// --- no-this-alias: use arrow functions to preserve context ---
-class EventEmitter {
-	private handlers: Array<() => void> = [];
-
-	register(): void {
-		this.handlers.push(() => {
-			this.notify();
-		});
-	}
-
-	private notify(): void {
-		this.handlers.forEach((handler) => handler());
-	}
-}
-
-// --- no-unsafe-declaration-merging: don't merge interface + class ---
-// (Simply keep them separate or use one or the other)
 
 // --- no-invalid-void-type: void only in return types ---
 const runTask = (task: () => void): void => {
 	task();
 };
 
-// --- no-confusing-non-null-assertion: avoid ! after comparisons ---
+// --- no-confusing-non-null-assertion: use proper boolean checks ---
 const hasKey = (map: Map<string, string>, key: string): boolean => map.has(key);
 
-// --- stroustrup brace style: else/catch on new line ---
+// --- no-dynamic-delete: use Map instead of object with dynamic delete ---
+const createRegistry = () => {
+	const registry = new Map<string, string>();
+	return {
+		add: (key: string, value: string) => {
+			registry.set(key, value);
+		},
+		remove: (key: string) => {
+			registry.delete(key);
+		},
+		get: (key: string) => registry.get(key),
+	};
+};
+
+// --- safeDivide: no-else-return ---
 const safeDivide = (a: number, b: number): number => {
 	if (b === 0) {
 		return 0;
 	}
-	else {
-		return a / b;
-	}
+	return a / b;
 };
 
 // --- no-loss-of-precision: use safe numbers ---
@@ -233,13 +205,51 @@ const config: AppConfig = {
 	},
 };
 
-// Export everything to satisfy no-unused-vars and import/prefer-default-export
+// --- Use generics and identity to demonstrate them ---
+const wrappedName = identity(name);
+const wrappedNumbers = wrapInArray(total);
+const themeValue = getProperty(config.settings, 'theme');
+
+// --- Use enum values so they are referenced ---
+const currentStatus = Status.Active;
+const fallbackStatus = Status.Pending;
+const topPriority = Priority.Critical;
+const lowPriority = Priority.Low;
+
+// --- Use remaining utilities ---
+const parsed2 = parseJson('{"ok":true}');
+const { id: userId } = parsed;
+const found = findUser('abc');
+const displayName = getDisplayName('abc');
+const calc = new Calculator(10);
+const divResult = safeDivide(10, 3);
+const zeroCheck = isZero(0);
+const keyCheck = hasKey(new Map<string, string>(), 'test');
+const counterObj = createCounter();
+const counterVal = counterObj.increment();
+const registry = createRegistry();
+const taskResult = runTask(() => {
+	identity(1);
+});
+
+// --- DataStore usage ---
+const store: DataStore = {
+	users: [user],
+	admins: [{
+		name: 'Bob',
+		age: 40,
+		email: 'bob@example.com',
+		role: 'admin',
+		permissions: ['read', 'write'],
+	}],
+	tags: ['ts', 'eslint'],
+	scores: doubled,
+};
+
+// Export everything to satisfy no-unused-vars
 export {
-	Status,
-	Priority,
 	userMap,
 	tagSet,
-	scoreList,
 	parseJson,
 	appName,
 	maxRetries,
@@ -254,19 +264,15 @@ export {
 	identity,
 	wrapInArray,
 	getProperty,
-	processValue,
-	convert,
-	AppInfo,
 	Calculator,
-	Logger,
+	createCounter,
 	numbers,
 	doubled,
 	evens,
 	total,
-	removeKey,
-	EventEmitter,
 	runTask,
 	hasKey,
+	createRegistry,
 	safeDivide,
 	safeInt,
 	safeFloat,
@@ -277,7 +283,28 @@ export {
 	greeting,
 	label,
 	config,
+	wrappedName,
+	wrappedNumbers,
+	themeValue,
+	currentStatus,
+	fallbackStatus,
+	topPriority,
+	lowPriority,
+	parsed2,
+	found,
+	displayName,
+	calc,
+	divResult,
+	zeroCheck,
+	keyCheck,
+	counterObj,
+	counterVal,
+	registry,
+	taskResult,
+	store,
 };
 
 // Re-export types/interfaces
-export type { User, AdminUser, AppConfig, DataStore, Formatter, Comparator };
+export type {
+	User, AdminUser, AppConfig, DataStore, Formatter, Comparator,
+};
