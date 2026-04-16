@@ -101,7 +101,7 @@ const safeParse = (json) => {
 	try {
 		return JSON.parse(json);
 	}
-	catch (err) {
+	catch {
 		return null;
 	}
 };
