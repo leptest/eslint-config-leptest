@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint .",
-    "eslint-fix": "eslint --fix ."
+    "eslint-fix": "eslint --fix .",
+    "show-config": "node show-config.js",
+    "show-config:json": "node show-config.js --json"
   },
   "repository": {
     "type": "git",
