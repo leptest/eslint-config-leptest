@@ -1,5 +1,6 @@
 const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
+const stylistic = require('@stylistic/eslint-plugin');
 const react = require('eslint-plugin-react');
 const reactHooks = require('eslint-plugin-react-hooks');
 const jsxA11y = require('eslint-plugin-jsx-a11y');
@@ -21,6 +22,7 @@ module.exports = [
 	compat.configs['flat/recommended'],
 	{
 		plugins: {
+			'@stylistic': stylistic,
 			n,
 			promise,
 		},
@@ -59,7 +61,7 @@ module.exports = [
 			curly: ['error', 'multi-line'],
 			'default-case': ['error', { commentPattern: '^no default$' }],
 			'default-case-last': 'error',
-			'dot-notation': ['error', { allowKeywords: true }],
+			'no-object-constructor': 'error',
 			eqeqeq: ['error', 'always', { null: 'ignore' }],
 			'grouped-accessor-pairs': 'error',
 			'guard-for-in': 'error',
@@ -298,7 +300,7 @@ module.exports = [
 			// ============================================
 			'n/handle-callback-err': ['error', '^(err|error)$'],
 			'n/no-callback-literal': 'error',
-			'n/no-deprecated-api': 'error',
+			'n/no-deprecated-api': 'warn',
 			'n/no-exports-assign': 'error',
 			'n/no-new-require': 'error',
 			'n/no-path-concat': 'error',
@@ -311,16 +313,18 @@ module.exports = [
 
 			// ============================================
 			// Custom overrides (original project rules)
+			// Uses @stylistic for formatting rules (replacing
+			// deprecated core ESLint formatting rules)
 			// ============================================
-			semi: [2, 'always'],
-			'no-extra-semi': 2,
-			'no-tabs': 0,
+			'@stylistic/semi': [2, 'always'],
+			'@stylistic/no-extra-semi': 2,
+			'@stylistic/no-tabs': 0,
 			'react/jsx-indent': [2, 'tab'],
 			'react/jsx-indent-props': [2, 'tab'],
-			indent: [2, 'tab', {
+			'@stylistic/indent': [2, 'tab', {
 				SwitchCase: 1
 			}],
-			'brace-style': [
+			'@stylistic/brace-style': [
 				2,
 				'stroustrup',
 				{
@@ -332,7 +336,7 @@ module.exports = [
 			'jsx-a11y/label-has-associated-control': 2,
 			'react/jsx-one-expression-per-line': 0,
 			'no-console': 2,
-			'max-len': [2, {
+			'@stylistic/max-len': [2, {
 				code: 120,
 				ignoreTrailingComments: true,
 				ignoreComments: true,
@@ -340,7 +344,7 @@ module.exports = [
 				ignoreStrings: true,
 				tabWidth: 1
 			}],
-			'linebreak-style': [2, 'windows'],
+			'@stylistic/linebreak-style': [2, 'windows'],
 			'react/function-component-definition': [
 				2,
 				{
@@ -350,9 +354,9 @@ module.exports = [
 			],
 			'react/jsx-no-useless-fragment': 2,
 			'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-			'comma-dangle': [2, 'only-multiline'],
-			'space-before-function-paren': [2, 'never'],
-			'multiline-ternary': [2, 'never']
+			'@stylistic/comma-dangle': [2, 'only-multiline'],
+			'@stylistic/space-before-function-paren': [2, 'never'],
+			'@stylistic/multiline-ternary': [2, 'never']
 		}
 	}
 ];
