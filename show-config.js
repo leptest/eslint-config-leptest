@@ -4,9 +4,16 @@
  * Prints the fully resolved ESLint configuration.
  *
  * Usage:
- *   node show-config.js              # pretty-print to stdout
- *   node show-config.js --json       # raw JSON to stdout
- *   node show-config.js [file]       # resolve config for a specific file
+ *   node show-config.js                        # pretty-print to stdout
+ *   node show-config.js --json                 # raw JSON to stdout
+ *   node show-config.js --json --normalize     # normalized JSON (for diffing)
+ *   node show-config.js [file]                 # resolve config for a specific file
+ *
+ * Flags:
+ *   --json         Output raw JSON instead of pretty-print
+ *   --normalize    Normalize severities to strings ("off"/"warn"/"error"),
+ *                  sort rules alphabetically, and strip "off" rules.
+ *                  Use this when comparing configs across setups.
  *
  * If no file is given, resolves the config as it would apply to a .js file
  * in the project root (the file does not need to exist).
@@ -16,15 +23,44 @@ const { ESLint } = require('eslint');
 const path = require('path');
 
 const args = process.argv.slice(2);
+const flags = ['--json', '--normalize'];
 const jsonFlag = args.includes('--json');
-const filePath = args.find((a) => a !== '--json') || 'file.js';
+const normalizeFlag = args.includes('--normalize');
+const filePath = args.find((a) => !flags.includes(a)) || 'file.js';
 const resolvedPath = path.resolve(filePath);
+
+const SEVERITY_MAP = { 0: 'off', 1: 'warn', 2: 'error' };
+
+function normalizeSeverity(value) {
+	if (Array.isArray(value)) {
+		const [sev, ...opts] = value;
+		const normalized = SEVERITY_MAP[sev] || sev;
+		return opts.length ? [normalized, ...opts] : normalized;
+	}
+	return SEVERITY_MAP[value] || value;
+}
+
+function normalizeRules(rules) {
+	const sorted = {};
+	const keys = Object.keys(rules).sort();
+	for (const key of keys) {
+		const normalized = normalizeSeverity(rules[key]);
+		const sev = Array.isArray(normalized) ? normalized[0] : normalized;
+		if (sev === 'off') continue;
+		sorted[key] = normalized;
+	}
+	return sorted;
+}
 
 (async () => {
 	const eslint = new ESLint();
 	const config = await eslint.calculateConfigForFile(resolvedPath);
 
-	if (jsonFlag) {
+	if (normalizeFlag) {
+		config.rules = normalizeRules(config.rules);
+	}
+
+	if (jsonFlag || normalizeFlag) {
 		process.stdout.write(JSON.stringify(config, null, 2));
 		process.stdout.write('\n');
 		return;
