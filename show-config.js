@@ -52,7 +52,7 @@ function normalizeRules(rules) {
 	return sorted;
 }
 
-(async () => {
+(async() => {
 	const eslint = new ESLint();
 	const config = await eslint.calculateConfigForFile(resolvedPath);
 
@@ -117,7 +117,8 @@ function normalizeRules(rules) {
 
 	// Rules summary
 	console.log('\n── Rules Summary ───────────────────────────────────────────────');
-	console.log(`  Total: ${ruleEntries.length}  |  error: ${errors.length}  |  warn: ${warnings.length}  |  off: ${off.length}`);
+	const total = ruleEntries.length;
+	console.log(`  Total: ${total}  |  error: ${errors.length}  |  warn: ${warnings.length}  |  off: ${off.length}`);
 
 	// Rules detail
 	console.log('\n── Rules (error) ───────────────────────────────────────────────');

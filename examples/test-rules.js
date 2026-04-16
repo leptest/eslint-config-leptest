@@ -12,7 +12,7 @@ const eslint = (dir) => {
 		);
 		return JSON.parse(result);
 	}
-	catch (e) {
+	catch(e) {
 		return JSON.parse(e.stdout);
 	}
 };
