@@ -34,7 +34,8 @@ type Formatter = (input: string) => string;
 type Comparator<T> = (a: T, b: T) => number;
 
 // --- no-duplicate-enum-values, prefer-literal-enum-member ---
-// --- export enums directly to avoid no-unused-vars on members ---
+// --- export enums directly ---
+/* eslint-disable no-shadow, no-unused-vars */
 export enum Status {
 	Active = 'active',
 	Inactive = 'inactive',
@@ -48,6 +49,7 @@ export enum Priority {
 	High = 2,
 	Critical = 3,
 }
+/* eslint-enable no-shadow, no-unused-vars */
 
 // --- consistent-generic-constructors: specify generic on constructor side ---
 const userMap = new Map<string, User>();
