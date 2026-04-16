@@ -61,9 +61,11 @@ if (42 === x) { // violates: yoda
 
 debugger; // violates: no-debugger
 
+if (x) {} // violates: no-empty (empty block statement)
+
 try {
   throw "error string"; // violates: no-throw-literal, quotes
-} catch (e) { // violates: no-empty (empty catch block)
+} catch (e) {
 }
 
 function mutateParam(param) { // violates: no-unused-vars (function never called)
