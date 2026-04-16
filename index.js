@@ -213,7 +213,11 @@ module.exports = [
 
 			// ============================================
 			// Import rules (from airbnb + standard)
+			// Override recommended preset warn→error
 			// ============================================
+			'import/no-duplicates': 'error',
+			'import/no-named-as-default': 'error',
+			'import/no-named-as-default-member': 'error',
 			'import/first': 'error',
 			'import/newline-after-import': 'error',
 			'import/no-amd': 'error',
@@ -228,6 +232,11 @@ module.exports = [
 			'import/extensions': ['error', 'ignorePackages', {
 				js: 'never', mjs: 'never', jsx: 'never', ts: 'never', tsx: 'never'
 			}],
+
+			// ============================================
+			// React hooks (override recommended preset warn→error)
+			// ============================================
+			'react-hooks/exhaustive-deps': 'error',
 
 			// ============================================
 			// React rules (from airbnb, beyond recommended)
@@ -300,7 +309,7 @@ module.exports = [
 			// ============================================
 			'n/handle-callback-err': ['error', '^(err|error)$'],
 			'n/no-callback-literal': 'error',
-			'n/no-deprecated-api': 'warn',
+			'n/no-deprecated-api': 'error',
 			'n/no-exports-assign': 'error',
 			'n/no-new-require': 'error',
 			'n/no-path-concat': 'error',
