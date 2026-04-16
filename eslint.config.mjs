@@ -1,6 +1,9 @@
 import config from './index.js';
 
 export default [
+	{
+		files: ['**/*.{js,jsx,ts,tsx}'],
+	},
 	...config,
 	{
 		ignores: [

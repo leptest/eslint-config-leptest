@@ -232,6 +232,38 @@ const taskResult = runTask(() => {
 	identity(1);
 });
 
+// --- New @typescript-eslint rules (ESLint 9 / typescript-eslint v8) ---
+
+// default-param-last: defaults come after required params
+const greetUser = (userName: string, prefix = 'Hello'): string => `${prefix}, ${userName}`;
+
+// naming-convention: camelCase/PascalCase for vars, PascalCase for types
+const validCamelCase = 1;
+const ValidPascalCase = 'component';
+const VALID_UPPER_CASE = 'constant';
+interface ValidTypeName {
+	fieldValue: number;
+}
+
+// no-dupe-class-members: tested via Calculator class (unique method names)
+
+// no-loop-func: no functions referencing mutable loop vars
+const stableResults: number[] = [];
+const loopItems = [1, 2, 3];
+loopItems.forEach((item) => {
+	stableResults.push(item * 2);
+});
+
+// no-shadow: no shadowing of outer variables
+const outerA = 1;
+const innerB = outerA + 1;
+
+// no-unused-expressions: all expressions have side effects or assignments
+const computed = validCamelCase + innerB;
+
+// no-redeclare: no redeclared variables
+const uniqueVar = validCamelCase + 1;
+
 // --- DataStore usage ---
 const store: DataStore = {
 	users: [user],
@@ -302,9 +334,17 @@ export {
 	registry,
 	taskResult,
 	store,
+	greetUser,
+	validCamelCase,
+	ValidPascalCase,
+	VALID_UPPER_CASE,
+	stableResults,
+	innerB,
+	computed,
+	uniqueVar,
 };
 
 // Re-export types/interfaces
 export type {
-	User, AdminUser, AppConfig, DataStore, Formatter, Comparator,
+	User, AdminUser, AppConfig, DataStore, Formatter, Comparator, ValidTypeName,
 };

@@ -202,6 +202,49 @@ const confusingCheck = confusingMap.has("key")!;
 const bigNum = 9007199254740993;
 const bigFloat = 5123000000000000000000000000001;
 
+// --- New @typescript-eslint rules (ESLint 9 / typescript-eslint v8) ---
+
+// @typescript-eslint/default-param-last
+function badDefaultParam(a: string = "default", b: number): string {
+  return `${a}${b}`;
+}
+
+// @typescript-eslint/naming-convention (variable must be camelCase/PascalCase/UPPER_CASE)
+const snake_case_var: string = "bad";
+// naming-convention (function must be camelCase/PascalCase)
+function not_camel_case(): void {}
+// naming-convention (type must be PascalCase)
+type bad_type_name = string;
+
+// @typescript-eslint/no-dupe-class-members
+class DuplicateMembers {
+  method(): void {}
+  method(): void {} // duplicate
+}
+
+// @typescript-eslint/no-loop-func
+const loopResults: Array<() => number> = [];
+let loopIdx = 0;
+while (loopIdx < 5) {
+  loopResults.push(() => loopIdx); // @typescript-eslint/no-loop-func
+  loopIdx += 1;
+}
+
+// @typescript-eslint/no-redeclare
+let redeclared = 1;
+let redeclared = 2; // @typescript-eslint/no-redeclare
+
+// @typescript-eslint/no-shadow
+const outerValue = 10;
+function shadowingFunc(): number {
+  const outerValue = 20; // @typescript-eslint/no-shadow
+  return outerValue;
+}
+
+// @typescript-eslint/no-unused-expressions
+const sideEffectStr: string = "hello";
+sideEffectStr; // @typescript-eslint/no-unused-expressions
+
 // Export to avoid module-level unused warnings
 export {
   anything,
@@ -251,4 +294,12 @@ export {
   ignored,
   emptyFunction,
   emptyArrow,
+  badDefaultParam,
+  snake_case_var,
+  not_camel_case,
+  bad_type_name,
+  DuplicateMembers,
+  loopResults,
+  redeclared,
+  shadowingFunc,
 };

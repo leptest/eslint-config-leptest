@@ -64,12 +64,19 @@ const getLabel = (code) => {
 
 // class with constructor, methods, class-methods-use-this
 class DataProcessor {
+	#transformCount = 0;
+
 	constructor(data) {
 		this.data = data;
 		this.processed = false;
 	}
 
+	#logTransform() {
+		this.#transformCount += 1;
+	}
+
 	process() {
+		this.#logTransform();
 		this.processed = true;
 		return this.data.map((item) => item * 2);
 	}
@@ -77,6 +84,10 @@ class DataProcessor {
 	reset() {
 		this.processed = false;
 		this.data = [];
+	}
+
+	getTransformCount() {
+		return this.#transformCount;
 	}
 }
 
@@ -172,10 +183,24 @@ const emailPattern = /^[^@]+@[^@]+$/;
 // no-unneeded-ternary (defaultAssignment: false)
 const hasName = Boolean(appName);
 
+// --- New ESLint 9+ rules ---
+
+// no-object-constructor: use object literal instead of new Object()
+const emptyObj = {};
+const objWithProps = { key: 'value' };
+
+// no-constant-binary-expression: meaningful comparisons only
+const maybeNull = Math.random() > 0.5 ? null : 'hello';
+const isNull = maybeNull === null;
+
+// no-new-native-nonconstructor: call Symbol() without new
+const sym = Symbol('mySymbol');
+
 // using the imported and declared values to avoid no-unused-vars
 const emitter = new EventEmitter();
 const processor = new DataProcessor([1, 2, 3]);
 const processed = processor.process();
+const transformCount = processor.getTransformCount();
 
 export {
 	result,
@@ -213,6 +238,11 @@ export {
 	emitter,
 	processed,
 	DataProcessor,
+	emptyObj,
+	objWithProps,
+	isNull,
+	transformCount,
+	sym,
 };
 
 export default config;

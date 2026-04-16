@@ -80,4 +80,45 @@ function BadComponent(props) {
   );
 }
 
+// --- New rules (ESLint 9 + updated plugins) ---
+
+// react/display-name - anonymous component without displayName
+const AnonymousComponent = React.memo((props) => (
+  <div>{props.label}</div>
+));
+
+// react/jsx-key - missing key in .map()
+const MissingKeys = () => (
+  <ul>
+    {["a", "b", "c"].map((item) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+);
+
+// react/no-direct-mutation-state
+class MutatesState extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+  handleClick() {
+    this.state.count = 5; // violates: react/no-direct-mutation-state
+  }
+  render() {
+    return <button type="button" onClick={() => this.handleClick()}>{this.state.count}</button>;
+  }
+}
+
+// jsx-a11y/autocomplete-valid - invalid autocomplete value for input type
+const BadAutocomplete = () => (
+  <form>
+    <label htmlFor="ac-email">
+      Email
+      <input id="ac-email" type="email" autoComplete="postal-code" />
+    </label>
+  </form>
+);
+
+export { AnonymousComponent, MissingKeys, MutatesState, BadAutocomplete };
 export default BadComponent;
