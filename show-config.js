@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Prints the fully resolved ESLint configuration for a given file.
+ * Prints the fully resolved ESLint configuration.
  *
  * Usage:
- *   node show-resolved-config.js [file]          # pretty-print to stdout
- *   node show-resolved-config.js [file] --json   # raw JSON to stdout
+ *   node show-config.js              # pretty-print to stdout
+ *   node show-config.js --json       # raw JSON to stdout
+ *   node show-config.js [file]       # resolve config for a specific file
  *
- * If no file is given, defaults to "examples/test.js".
- *
- * This uses ESLint's CLIEngine/ESLint API to resolve the final config,
- * which merges all extended configs, plugins, and local rule overrides
- * into a single flat object.
+ * If no file is given, resolves the config as it would apply to a .js file
+ * in the project root (the file does not need to exist).
  */
 
 const { ESLint } = require('eslint');
@@ -19,7 +17,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 const jsonFlag = args.includes('--json');
-const filePath = args.find((a) => a !== '--json') || 'examples/test.js';
+const filePath = args.find((a) => a !== '--json') || 'file.js';
 const resolvedPath = path.resolve(filePath);
 
 (async () => {
@@ -42,7 +40,10 @@ const resolvedPath = path.resolve(filePath);
 	console.log('╔══════════════════════════════════════════════════════════════╗');
 	console.log('║           Resolved ESLint Configuration                     ║');
 	console.log('╚══════════════════════════════════════════════════════════════╝');
-	console.log(`\nFile: ${resolvedPath}\n`);
+	if (filePath !== 'file.js') {
+		console.log(`\nFile: ${resolvedPath}\n`);
+	}
+	console.log('');
 
 	// Parser
 	console.log('── Parser ──────────────────────────────────────────────────────');
