@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint --ext .jsx,.js,.tsx,.ts .",
-    "eslint-fix": "eslint --ext .jsx,.js,.tsx,.ts --fix ."
+    "eslint-fix": "eslint --ext .jsx,.js,.tsx,.ts --fix .",
+    "show-config": "node show-resolved-config.js",
+    "show-config:json": "node show-resolved-config.js --json"
   },
   "repository": {
     "type": "git",
