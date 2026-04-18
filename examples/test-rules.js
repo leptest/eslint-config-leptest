@@ -4,15 +4,15 @@ const { execSync } = require('child_process');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const eslint = (dir, label) => {
+const eslint = (dir) => {
 	try {
 		const result = execSync(
-			`npx eslint ${dir} --ext .js,.jsx,.ts,.tsx -f json`,
+			`npx eslint ${dir} -f json`,
 			{ cwd: root, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
 		);
 		return JSON.parse(result);
 	}
-	catch (e) {
+	catch(e) {
 		return JSON.parse(e.stdout);
 	}
 };

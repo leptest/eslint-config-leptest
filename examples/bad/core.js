@@ -108,3 +108,38 @@ if (x){ // violates: space-before-blocks
 function callee() { return arguments.callee; } // violates: no-restricted-properties (arguments.callee)
 
 var thisIsAnExtremelyLongVariableName = "this line is intentionally very long to exceed the maximum line length of one hundred and twenty characters"; // violates: max-len, no-var, quotes
+
+// --- New ESLint 9+ rules ---
+
+// no-object-constructor
+var constructed = new Object(); // violates: no-object-constructor, no-var
+
+// no-constant-binary-expression
+var alwaysFalse = {} === null; // violates: no-constant-binary-expression, no-var
+var alwaysString = "hello" || "world"; // violates: no-constant-binary-expression, no-var
+
+// no-empty-static-block
+class EmptyStaticBlock {
+  static {}
+}
+
+// no-unused-private-class-members
+class UnusedPrivateMembers {
+  #unusedField = 42;
+  #unusedMethod() { return 1; }
+  getPublic() { return 0; }
+}
+
+// no-new-native-nonconstructor
+var badSymbol = new Symbol("bad"); // violates: no-new-native-nonconstructor, no-var
+
+// @stylistic/multiline-ternary (config: "never" = must be single line)
+var multilineTern = x > 5
+  ? "big"
+  : "small"; // violates: @stylistic/multiline-ternary, no-var, quotes
+
+// @stylistic/comma-dangle (config: "only-multiline" = single-line trailing comma is bad)
+var trailingComma = [1, 2, 3,]; // violates: @stylistic/comma-dangle, no-var
+
+// @stylistic/max-len (code: 120, ignoreStrings/ignoreComments, so use long code without strings)
+var resultOfVeryLongExpression = thisIsAnExtremelyLongVariableName + constructed + alwaysFalse + alwaysString + badSymbol + multilineTern + trailingComma;

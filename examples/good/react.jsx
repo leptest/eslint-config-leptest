@@ -1,17 +1,11 @@
 // React component examples demonstrating JSX, a11y, and hooks rules
 // eslint-disable-next-line import/no-unresolved
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useCallback, memo } from 'react';
 
 // Arrow function component (named), destructuring props, hooks
 const SearchForm = ({ onSubmit, placeholder }) => {
 	const [query, setQuery] = useState('');
-	const [results, setResults] = useState([]);
-
-	useEffect(() => {
-		if (query.length > 2) {
-			setResults([`Result for: ${query}`]);
-		}
-	}, [query]);
+	const results = query.length > 2 ? [`Result for: ${query}`] : [];
 
 	const handleChange = useCallback((e) => {
 		setQuery(e.target.value);
