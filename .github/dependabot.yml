@@ -8,6 +8,12 @@ updates:
       actions:
         patterns:
           - "*"
+    ignore:
+      # CI action majors that risk breaking the security/quality pipeline (#328).
+      - dependency-name: "actions/checkout"
+        versions: [">=5"]   # stay on v4 line; v5-v7 change fork-PR checkout defaults
+      - dependency-name: "SonarSource/sonarcloud-github-action"
+        versions: [">=3"]   # v2 -> v5 crosses the deprecated->renamed action boundary
 
   - package-ecosystem: npm
     directory: "/"
@@ -21,3 +27,7 @@ updates:
         update-types:
           - minor
           - patch
+    ignore:
+      # eslint 10 requires Node >=22.22.0; local/CI toolchain is Node 22.21.1 (#318).
+      - dependency-name: "eslint"
+        versions: [">=10"]
